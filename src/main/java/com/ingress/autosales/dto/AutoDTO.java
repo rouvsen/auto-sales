@@ -1,0 +1,43 @@
+package com.ingress.autosales.dto;
+
+public record AutoDTO (
+        String name,
+        Integer brandId,
+        String state,
+        Integer cityId,
+        Double price,
+        String currency,
+        Integer banTypeId,
+        Integer year,
+        Boolean isAutoDetails,//
+        String color,
+        String fuelType,
+        String transmitter,
+        String gearbox,
+        Integer volume,
+        Integer power,
+        Integer mileage,
+        Short totalOwners,
+        Integer totalSeats,
+        String madeFor,
+        String status,
+        Boolean credit,
+        Boolean barter,
+         Boolean punctuation,
+         Boolean colored,
+         Boolean isAccidental,
+         Boolean alloyWheels,
+         Boolean abs,
+         Boolean hatch,
+         Boolean rainSensor,
+         Boolean centralLocking,
+         Boolean parkingRadar,
+         Boolean airConditioning,
+         Boolean seatHeating,
+         Boolean leatherSalon,
+         Boolean xenonLamps,
+         Boolean rearViewCamera,
+         Boolean sideCurtains,
+         Boolean seatVentilation
+) {
+}

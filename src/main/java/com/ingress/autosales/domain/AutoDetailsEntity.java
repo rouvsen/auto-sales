@@ -45,7 +45,8 @@ public class AutoDetailsEntity {
 
     private Integer totalSeats;
 
-    private String madeFor;
+    @Enumerated(EnumType.STRING)
+    private MadeFor madeFor;
 
     @Enumerated(EnumType.STRING)
     private Status status;

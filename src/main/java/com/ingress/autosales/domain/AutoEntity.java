@@ -7,9 +7,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -23,6 +27,14 @@ public class AutoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+//    @GeneratedValue(generator = "UUID")
+//    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "pin", updatable = false, nullable = false, unique = true)
+    private UUID pin;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private SellerEntity seller;
+
     @ManyToOne
     @JoinColumn(name = "brand_id")
     private BrandEntity brand;
@@ -32,7 +44,7 @@ public class AutoEntity {
 
     @ManyToOne
     @JoinColumn(name = "city_id")
-    private CityEntity cityEntity;
+    private CityEntity city;
 
     private BigDecimal price;
 
@@ -45,7 +57,20 @@ public class AutoEntity {
 
     private Integer year;
 
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
+    private Boolean isAutoDetails;
+
     @OneToMany(mappedBy = "auto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<AutoDetailsEntity> autoDetailEntities;
+
+    @PrePersist
+    private void generatePin() {
+        this.pin = UUID.randomUUID();
+    }
 }
 

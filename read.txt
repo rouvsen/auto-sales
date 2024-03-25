@@ -1,0 +1,14 @@
++ Create sellerEntity API
++ Each sellerEntity should be able to remove his/her cars with card details. For a full list of the car entity fields refer to turbo.az.
+
++ Create Seller
++ Create Auto with sellerId
++ Delete Auto with sellerId, and pin (Auto's identifier)
++ Create AutoDetails with autoId
+
+- Search cars API similar to the search functionality in turbo.az
++ Create relations between car entity, car features one to many
++ Create relations from sellerEntity to car entity
+
+-? Create automation scripts to build docker images for the given MS
+-? Create docker compose configurations to deploy the ms to given environment
