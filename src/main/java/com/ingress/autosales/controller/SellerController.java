@@ -1,7 +1,6 @@
 package com.ingress.autosales.controller;
 
 import com.ingress.autosales.dto.SellerDTO;
-import com.ingress.autosales.dto.SellerResponseDTO;
 import com.ingress.autosales.service.SellerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
