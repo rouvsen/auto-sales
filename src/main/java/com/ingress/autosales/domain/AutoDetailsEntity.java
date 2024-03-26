@@ -1,5 +1,6 @@
 package com.ingress.autosales.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ingress.autosales.constants.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

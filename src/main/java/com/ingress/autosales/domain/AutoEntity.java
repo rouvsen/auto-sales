@@ -1,5 +1,6 @@
 package com.ingress.autosales.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ingress.autosales.constants.Currency;
 import com.ingress.autosales.constants.State;
 import jakarta.persistence.*;
@@ -32,7 +33,11 @@ public class AutoEntity {
     @Column(name = "pin", updatable = false, nullable = false, unique = true)
     private UUID pin;
 
+    @Column(name = "name", nullable = false)
+    private String name;
+
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private SellerEntity seller;
 
     @ManyToOne
@@ -66,7 +71,7 @@ public class AutoEntity {
     private Boolean isAutoDetails;
 
     @OneToMany(mappedBy = "auto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<AutoDetailsEntity> autoDetailEntities;
+    private Set<AutoDetailsEntity> autoDetails;
 
     @PrePersist
     private void generatePin() {
