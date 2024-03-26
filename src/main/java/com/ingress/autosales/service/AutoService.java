@@ -1,16 +1,21 @@
 package com.ingress.autosales.service;
 
 import com.ingress.autosales.constants.*;
+import com.ingress.autosales.constants.Currency;
+import com.ingress.autosales.criteria.SearchCriteria;
 import com.ingress.autosales.domain.*;
 import com.ingress.autosales.dto.AutoDTO;
 import com.ingress.autosales.repository.AutoRepository;
+import com.ingress.autosales.specification.AutoSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +35,7 @@ public class AutoService {
         CityEntity city = cityService.findById(dto.cityId());
         BanTypeEntity banType = banTypeService.findById(dto.banTypeId());
         AutoEntity auto = AutoEntity.builder()
+                .name(dto.name())
                 .seller(sellerEntity)
                 .brand(brand)
                 .state(State.valueOf(dto.state().toUpperCase()))
@@ -39,17 +45,18 @@ public class AutoService {
                 .banType(banType)
                 .year(dto.year())
                 .isAutoDetails(dto.isAutoDetails())
+                .autoDetails(new HashSet<>())
                 .build();
-        autoRepository.save(auto);
-        if (auto.getIsAutoDetails()) {
-            autoDetailsService.create(buildDetails(auto, dto));
+        if (dto.isAutoDetails()) {
+            AutoDetailsEntity autoDetails = autoDetailsService.create(buildDetails(dto));
+            auto.getAutoDetails().add(autoDetails);
         }
-        return auto;
+        return autoRepository.save(auto);
     }
 
-    private AutoDetailsEntity buildDetails(AutoEntity auto, AutoDTO dto) {
+    private AutoDetailsEntity buildDetails(AutoDTO dto) {
         return AutoDetailsEntity.builder()
-                .auto(auto)
+//                .auto(auto)
                 .color(Objects.nonNull(dto.color()) ? Color.valueOf(dto.color().toUpperCase()) : Color.UNKNOWN)
                 .fuelType(Objects.nonNull(dto.fuelType()) ? FuelType.valueOf(dto.fuelType().toUpperCase()) : FuelType.UNKNOWN)
                 .transmitter(Objects.nonNull(dto.transmitter()) ? Transmitter.valueOf(dto.transmitter().toUpperCase()) : Transmitter.UNKNOWN)
@@ -92,5 +99,39 @@ public class AutoService {
             //throw an Exception
         }
         autoRepository.deleteById(autoEntity.getId());
+    }
+
+    public List<AutoEntity> getAll() {
+        return autoRepository.findAll();
+    }
+
+
+    public Page<AutoEntity> searchAutos(List<SearchCriteria> criteriaList, Pageable pageable) {
+        Specification<AutoEntity> specification = Specification.where(null);
+        for (SearchCriteria criteria : criteriaList) {
+            specification = specification.and(new AutoSpecification(criteria));
+        }
+        return autoRepository.findAll(specification, pageable);
+    }
+
+    public List<SearchCriteria> parseSearchCriteria(List<String> searchParams) {
+        List<SearchCriteria> criteriaList = new ArrayList<>();
+        for (String param : searchParams) {
+            String[] parts = param.split(":", 2);
+            if (parts.length == 2) {
+                criteriaList.add(new SearchCriteria(parts[0], ":", parts[1]));
+            } else {
+                parts = param.split(">", 2);
+                if (parts.length == 2) {
+                    criteriaList.add(new SearchCriteria(parts[0], ">", parts[1]));
+                } else {
+                    parts = param.split("<", 2);
+                    if (parts.length == 2) {
+                        criteriaList.add(new SearchCriteria(parts[0], "<", parts[1]));
+                    }
+                }
+            }
+        }
+        return criteriaList;
     }
 }
