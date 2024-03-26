@@ -9,7 +9,7 @@ public record AutoDTO (
         String currency,
         Integer banTypeId,
         Integer year,
-        Boolean isAutoDetails,//
+        Boolean isAutoDetails,//TODO
         String color,
         String fuelType,
         String transmitter,
