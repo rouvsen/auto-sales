@@ -19,6 +19,13 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  ms_auto:
+    depends_on:
+      - db
+    image: rouvsen/ms_auto:1.0.ff7b644
+    restart: always
+    ports:
+      - "8080:8080"
 
 volumes:
   mysql_db:
