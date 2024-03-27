@@ -28,6 +28,8 @@ public class AutoService {
     private final CityService cityService;
     private final BanTypeService banTypeService;
 
+    //special properties > name, price, state, year, additional - colored,
+
     @Transactional
     public AutoEntity create(AutoDTO dto, Integer sellerId) {
         SellerEntity sellerEntity = sellerService.findById(sellerId);

@@ -43,8 +43,6 @@ public class AutoController {
     }
 
 
-
-
     @DeleteMapping(value = "/{sellerId}/auto/{pin}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Integer sellerId, @PathVariable String pin) {

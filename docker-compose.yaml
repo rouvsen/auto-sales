@@ -19,10 +19,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-  ms_auto:
+  ms_auto_app:
     depends_on:
       - db
-    image: rouvsen/ms_auto:1.0.ff7b644
+    image: rouvsen/auto-sales:1.0.97900eb
     restart: always
     ports:
       - "8080:8080"
